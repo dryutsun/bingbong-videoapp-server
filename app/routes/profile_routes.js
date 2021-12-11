@@ -36,4 +36,19 @@ const router = express.Router();
 // NOTE: The user will not need to see all profiles, they will want to see their own profile.
 // Shall the stub be /user/? Ask the squad.
 
-router.get("/", (req, res, next) => {});
+// USERS GET INDEX
+router.get("/users", (req, res, next) => {
+  Profile.find()
+    .then((profile) => res.status(200).json({ profile }))
+    .catch(next =>
+      console.log(next));
+});
+
+// USERS DETAIL
+
+// router.get("/users/:userid", () => {
+//   console.log("Hello");
+// });
+
+module.exports = router
+

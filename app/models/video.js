@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("./user");
-const Comment = require("./comment");
+const commentSchema = require("./comment");
 
 const videoSchema = new mongoose.Schema({
   url: {
@@ -28,21 +28,12 @@ const videoSchema = new mongoose.Schema({
   categoryName: {
     type: String,
   }, // maybe needs its own schema
-<<<<<<< HEAD
   comments: [commentSchema],
-=======
-  comments: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment",
-    },
-  ],
->>>>>>> 61ecc76af5eed00d374b3493222d1a1173e018b6
 });
 
 const Video = mongoose.model("Video", videoSchema);
 
-module.exports = Video;
+module.exports = videoSchema;
 
 const test = new Video({
   url: "https://youtu.be/4hMpYTkjh4s",
@@ -55,7 +46,7 @@ const test = new Video({
   comments: [],
 });
 
-db.once("connected", function (err) {
+Video.once("connected", function (err) {
   if (err) {
     return console.error(err);
   }
