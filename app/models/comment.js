@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema(
   {
-    owner: {
+    postedBy: {
       // to create a reference, the type should be Object
       type: mongoose.Schema.Types.ObjectId,
       // ref is also needed, so we can poulate the owner
@@ -11,7 +11,8 @@ const commentSchema = new mongoose.Schema(
 
       required: true,
     },
-    display_text: {
+    commentText: {
+      type: String,
       required: true,
     },
 
