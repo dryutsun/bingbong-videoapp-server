@@ -28,7 +28,16 @@ const videoSchema = new mongoose.Schema({
   categoryName: {
     type: String,
   }, // maybe needs its own schema
+<<<<<<< HEAD
   comments: [commentSchema],
+=======
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
+>>>>>>> 61ecc76af5eed00d374b3493222d1a1173e018b6
 });
 
 const Video = mongoose.model("Video", videoSchema);
