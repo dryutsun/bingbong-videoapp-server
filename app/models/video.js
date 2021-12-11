@@ -15,7 +15,7 @@ const videoSchema = new mongoose.Schema({
     required: true,
   },
   owner: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
   thumbnail: {
@@ -29,7 +29,7 @@ const videoSchema = new mongoose.Schema({
   }, // maybe needs its own schema
   comments: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Comment",
     },
   ],
