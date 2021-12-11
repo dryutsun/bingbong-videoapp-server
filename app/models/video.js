@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("./user");
+const Comment = require("./comment");
 
 const videoSchema = new mongoose.Schema({
   url: {
@@ -15,7 +16,7 @@ const videoSchema = new mongoose.Schema({
     required: true,
   },
   owner: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
   thumbnail: {
@@ -27,14 +28,33 @@ const videoSchema = new mongoose.Schema({
   categoryName: {
     type: String,
   }, // maybe needs its own schema
-  comments: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Comment",
-    },
-  ],
+  comments: [commentSchema],
 });
 
 const Video = mongoose.model("Video", videoSchema);
 
 module.exports = Video;
+
+const test = new Video({
+  url: "https://youtu.be/4hMpYTkjh4s",
+  externalUrl: "https://youtu.be/4hMpYTkjh4s",
+  title: "Lorenzo Senni - Canone Infinito",
+  owner: "61b4e7e40bef58034e60c584",
+  thumbnail: "",
+  duration: "0459",
+  categoryName: "Music",
+  comments: [],
+});
+
+db.once("connected", function (err) {
+  if (err) {
+    return console.error(err);
+  }
+  Video.create(test, function (err, doc) {
+    if (err) {
+      return console.error(err);
+    }
+    console.log(doc);
+    return db.close();
+  });
+});

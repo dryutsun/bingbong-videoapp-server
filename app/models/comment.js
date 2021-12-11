@@ -16,16 +16,13 @@ const commentSchema = new mongoose.Schema(
       required: true,
     },
 
-    thumbnail: String, // Maybe better to pull it from the owner.
-
-    published_at: {
-      createdAt: true,
-    },
+    thumbnail: String, // Maybe better to pull it from the owner
   },
   {
     timestamps: true,
   }
 );
 
-const Comments = mongoose.model("Comment", commentSchema);
-module.exports = Comments;
+const Comment = mongoose.model("Comment", commentSchema);
+
+module.exports = Comment;

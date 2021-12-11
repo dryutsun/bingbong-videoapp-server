@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-
+const User = require("./user");
+const commentSchema = require("./comment");
+const videoSchema = require("./video");
 const profileSchema = new mongoose.Schema(
   {
     username: {
@@ -30,4 +32,4 @@ const profileSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Profile", userSchema);
