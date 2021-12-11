@@ -8,6 +8,7 @@ const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
 const videoRoutes =  require("./app/routes/video_routes")
 const commentRoutes =require ('./app/routes/comment_routes')
+const profileRoutes = require('./app/routes/profile_routes')
 
 
 // require middleware
@@ -77,6 +78,7 @@ app.use(userRoutes)
 
 app.use(videoRoutes)
 app.use(commentRoutes)
+app.use(profileRoutes)
 
 
 
