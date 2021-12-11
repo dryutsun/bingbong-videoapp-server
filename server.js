@@ -6,7 +6,9 @@ const cors = require('cors')
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
+const videoRoutes =  require("./app/routes/video_routes")
 const commentRoutes =require ('./app/routes/comment_routes')
+
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -68,7 +70,15 @@ app.use(requestLogger)
 // register route files
 app.use(exampleRoutes)
 app.use(userRoutes)
+
+app.use(videoRoutes)
 app.use(commentRoutes)
+
+
+
+app.get("/", (req, res) => {
+  res.json("You've hit the home route of the project 3 server!")
+})
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
