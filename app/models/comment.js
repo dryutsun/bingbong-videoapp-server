@@ -6,24 +6,23 @@ const commentSchema = new mongoose.Schema(
       // to create a reference, the type should be Object
       type: mongoose.Schema.Types.ObjectId,
       // ref is also needed, so we can poulate the owner
-      ref: "User",
+      ref: "User"
       // Note: Populate means replacing the owner id with the person document...
 
-      required: true,
+      
     },
     commentText: {
       type: String,
-      required: true,
+      required: true
     },
 
-    thumbnail: String, // Maybe better to pull it from the owner.
-
-    published_at: {
-      createdAt: true,
-    },
+    thumbnail: {
+      type: String,
+      required: true
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 
