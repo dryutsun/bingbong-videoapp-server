@@ -12,6 +12,7 @@ const videoRoutes =  require("./app/routes/video_routes")
 const errorHandler = require('./lib/error_handler')
 const replaceToken = require('./lib/replace_token')
 const requestLogger = require('./lib/request_logger')
+// const methodOverride = require('./method-override')
 
 // require database configuration logic
 // `db` will be the actual Mongo URI as a string
@@ -62,6 +63,9 @@ app.use(express.json())
 // this parses requests sent by `$.ajax`, which use a different content type
 app.use(express.urlencoded({ extended: true }))
 
+//method override 
+// app.use(methodOverride("_method"))
+
 // log each request as it comes in for debugging
 app.use(requestLogger)
 
@@ -69,6 +73,7 @@ app.use(requestLogger)
 app.use(exampleRoutes)
 app.use(userRoutes)
 app.use(videoRoutes)
+
 
 
 
