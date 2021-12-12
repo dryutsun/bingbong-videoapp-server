@@ -19,7 +19,11 @@ const profileSchema = new mongoose.Schema(
       required: true,
     },
     comments: [commentSchema],
-    videos: [videoSchema],
+    videos: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Videos",
+      required: true,
+    }],
   },
   {
     timestamps: true
