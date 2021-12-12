@@ -54,7 +54,7 @@ router.get('/comments/:id', (req, res, next) => {
 	Comment.findById(req.params.id)
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "example" JSON
-		.then((comment) => res.status(200).json({ comment: comment.toObject() }))
+		.then((comment) => res.status(200).json({ Comment: comment.toObject() }))
 		// if an error occurs, pass it to the handler
 		.catch(next)
 })
@@ -62,10 +62,10 @@ router.get('/comments/:id', (req, res, next) => {
 
 //example post data
 // {
-//     "Comment":{
-//         "commentText": "test post working",
-//         "thumbnail": "jonathan" 
-//     }
+    // "Comment":{
+    //     "commentText": "test post working",
+    //     "thumbnail": "jonathan" 
+    // }
 // }
 
 
@@ -86,5 +86,43 @@ router.post('/comments', (req, res, next) => {
 		.catch(next)
 })
 
+// UPDATE
+// PATCH /examples/5a7db6c74d55bc51bdf39793
+router.patch('/comments/:id', removeBlanks, (req, res, next) => {
+	// if the client attempts to change the `owner` property by including a new
+	// owner, prevent that by deleting that key/value pair
+	// delete req.body.example.owner
+
+	Comment.findById(req.params.id)
+		.then(handle404)
+		.then((editComment) => {
+			// pass the `req` object and the Mongoose record to `requireOwnership`
+			// it will throw an error if the current user isn't the owner
+			// requireOwnership(req, example)
+			// pass the result of Mongoose's `.update` to the next `.then`
+			return editComment.updateOne(req.body.Comment)
+		})
+		// if that succeeded, return 204 and no JSON
+		.then(() => res.sendStatus(204))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
+// DESTROY
+// DELETE /examples/5a7db6c74d55bc51bdf39793
+router.delete('/comments/:id',  (req, res, next) => {
+	Comment.findById(req.params.id)
+		.then(handle404)
+		.then((deleteComment) => {
+			// throw an error if current user doesn't own `example`
+			// requireOwnership(req, example)
+			// delete the example ONLY IF the above didn't throw
+			deleteComment.deleteOne()
+		})
+		// send back 204 and no content if the deletion succeeded
+		.then(() => res.sendStatus(204))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
 
 module.exports = router
