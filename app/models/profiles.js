@@ -18,6 +18,16 @@ const profileSchema = new mongoose.Schema(
       // Note: Populate means replacing the owner id with the person document...
       required: true,
     },
+    followers: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profile",
+
+    }],
+    following: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profile",
+
+    }],
     comments: [commentSchema],
     videos: [videoSchema],
   },
