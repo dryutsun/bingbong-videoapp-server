@@ -5,9 +5,11 @@ const passport = require("passport");
 
 // pull in Mongoose model for examples
 
-const User = require("../models/user");
 
+const User = require("../models/user");
 const Profile = require("../models/profiles");
+const Comment = require("../models/comment");
+
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
 const customErrors = require("../../lib/custom_errors");
@@ -30,14 +32,6 @@ const requireToken = passport.authenticate("bearer", { session: false });
 // instantiate a router (mini app that only handles routes)
 const router = express.Router();
 
-// Individual Video / Comment Index Route
-// GET / Video
-
-// GET ROUTE INDEX for logged-in user /user/:id
-// NOTE: The user will not need to see all profiles, they will want to see their own profile.
-// Shall the stub be /user/? Ask the squad.
-
-// USERS GET INDEX
 router.get("/users", (req, res, next) => {
   Profile.find()
     .then((profile) => res.status(200).json({ profile }))
