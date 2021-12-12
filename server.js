@@ -6,6 +6,7 @@ const cors = require('cors')
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
+
 const videoRoutes =  require("./app/routes/video_routes")
 const commentRoutes =require ('./app/routes/comment_routes')
 const profileRoutes = require('./app/routes/profile_routes')
@@ -16,6 +17,7 @@ const errorHandler = require('./lib/error_handler')
 const replaceToken = require('./lib/replace_token')
 const requestLogger = require('./lib/request_logger')
 // const methodOverride = require('./method-override')
+
 
 // require database configuration logic
 // `db` will be the actual Mongo URI as a string

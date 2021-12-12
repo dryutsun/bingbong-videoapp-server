@@ -4,6 +4,10 @@ const express = require("express");
 const passport = require("passport");
 
 // pull in Mongoose model for examples
+
+
+const User = require("../models/user");
+const Profile = require("../models/profiles");
 const Comment = require("../models/comment");
 
 // this is a collection of methods that help us detect situations when we need
@@ -27,8 +31,6 @@ const requireToken = passport.authenticate("bearer", { session: false });
 // instantiate a router (mini app that only handles routes)
 const router = express.Router();
 
-
-
 router.get("/users", (req, res, next) => {
   Profile.find()
     .then((profile) => res.status(200).json({ profile }))
@@ -43,3 +45,4 @@ router.get("/users", (req, res, next) => {
 // });
 
 module.exports = router
+

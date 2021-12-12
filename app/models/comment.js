@@ -15,16 +15,13 @@ const commentSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-
-    thumbnail: {
-      type: String,
-      required: true
-    }
+    thumbnail: String, // Maybe better to pull it from the owner
   },
   {
     timestamps: true
   }
 );
 
-const Comments = mongoose.model("Comment", commentSchema);
-module.exports = Comments;
+const Comment = mongoose.model("Comment", commentSchema);
+
+module.exports = commentSchema;
