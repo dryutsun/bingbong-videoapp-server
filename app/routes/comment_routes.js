@@ -108,4 +108,21 @@ router.patch('/comments/:id', removeBlanks, (req, res, next) => {
 		.catch(next)
 })
 
+// DESTROY
+// DELETE /examples/5a7db6c74d55bc51bdf39793
+router.delete('/comments/:id',  (req, res, next) => {
+	Comment.findById(req.params.id)
+		.then(handle404)
+		.then((deleteComment) => {
+			// throw an error if current user doesn't own `example`
+			// requireOwnership(req, example)
+			// delete the example ONLY IF the above didn't throw
+			deleteComment.deleteOne()
+		})
+		// send back 204 and no content if the deletion succeeded
+		.then(() => res.sendStatus(204))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
 module.exports = router
