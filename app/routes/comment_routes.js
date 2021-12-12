@@ -4,7 +4,7 @@ const express = require("express");
 const passport = require("passport");
 
 // pull in Mongoose model for examples
-const comment = require("../models/comment");
+const Comment = require("../models/comment");
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -29,3 +29,100 @@ const router = express.Router();
 
 // Individual Video / Comment Index Route
 // GET / Video
+
+// INDEX
+// GET /examples
+router.get('/comments', (req, res, next) => {
+	Comment.find()
+		.then((foundComments) => {
+            console.log(foundComments)
+			// `examples` will be an array of Mongoose documents
+			// we want to convert each one to a POJO, so we use `.map` to
+			// apply `.toObject` to each one
+			return foundComments.map((comment) => comment.toObject())
+		})
+		// respond with status 200 and JSON of the examples
+		.then((comments) => res.status(200).json({ comments: comments }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
+// SHOW
+// GET /examples/5a7db6c74d55bc51bdf39793
+router.get('/comments/:id', (req, res, next) => {
+	// req.params.id will be set based on the `:id` in the route
+	Comment.findById(req.params.id)
+		.then(handle404)
+		// if `findById` is succesful, respond with 200 and "example" JSON
+		.then((comment) => res.status(200).json({ Comment: comment.toObject() }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
+
+//example post data
+// {
+    // "Comment":{
+    //     "commentText": "test post working",
+    //     "thumbnail": "jonathan" 
+    // }
+// }
+
+
+// CREATE
+// POST /examples
+router.post('/comments', (req, res, next) => {
+	// set owner of new example to be current user
+	// req.body.comment.owner = req.user.id
+
+	Comment.create(req.body.Comment)
+		// respond to succesful `create` with status 201 and JSON of new "example"
+		.then((newComment) => {
+			res.status(201).json({ Comment: newComment.toObject() })
+		})
+		// if an error occurs, pass it off to our error handler
+		// the error handler needs the error message and the `res` object so that it
+		// can send an error message back to the client
+		.catch(next)
+})
+
+// UPDATE
+// PATCH /examples/5a7db6c74d55bc51bdf39793
+router.patch('/comments/:id', removeBlanks, (req, res, next) => {
+	// if the client attempts to change the `owner` property by including a new
+	// owner, prevent that by deleting that key/value pair
+	// delete req.body.example.owner
+
+	Comment.findById(req.params.id)
+		.then(handle404)
+		.then((editComment) => {
+			// pass the `req` object and the Mongoose record to `requireOwnership`
+			// it will throw an error if the current user isn't the owner
+			// requireOwnership(req, example)
+			// pass the result of Mongoose's `.update` to the next `.then`
+			return editComment.updateOne(req.body.Comment)
+		})
+		// if that succeeded, return 204 and no JSON
+		.then(() => res.sendStatus(204))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
+// DESTROY
+// DELETE /examples/5a7db6c74d55bc51bdf39793
+router.delete('/comments/:id',  (req, res, next) => {
+	Comment.findById(req.params.id)
+		.then(handle404)
+		.then((deleteComment) => {
+			// throw an error if current user doesn't own `example`
+			// requireOwnership(req, example)
+			// delete the example ONLY IF the above didn't throw
+			deleteComment.deleteOne()
+		})
+		// send back 204 and no content if the deletion succeeded
+		.then(() => res.sendStatus(204))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
+module.exports = router
