@@ -22,15 +22,25 @@ const profileSchema = new mongoose.Schema(
     videos: [videoSchema],
   },
   {
-    timestamps: true,
-    toObject: {
-      // remove `hashedPassword` field when we call `.toObject`
-      transform: (_doc, user) => {
-        delete user.hashedPassword;
-        return user;
-      },
-    },
+    timestamps: true
   }
 );
 
-module.exports = mongoose.model("Profile", profileSchema);
+const Profile = mongoose.model("Profile", profileSchema);
+
+// exporting module and aliasing
+module.exports = Profile
+
+
+// followers: [{type: mongoose.Schema.ObjectId, ref: 'User'}]
+// mechanism of attachment:
+// - push?
+// mechanism of removal:
+// - pull?
+
+// following: [{type: mongoose.Schema.ObjectId, ref: 'User'}]
+// mechanism of attachment:
+// - push?
+// mechanism of removal:
+// - pull?
+

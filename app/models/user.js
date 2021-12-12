@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+// Do Profiles have User or does user have profile?
+
+
 const userSchema = new mongoose.Schema(
   {
     email: {
@@ -11,18 +14,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     token: String,
   },
   {
-    timestamps: true,
-    toObject: {
-      // remove `hashedPassword` field when we call `.toObject`
-      transform: (_doc, user) => {
-        delete user.hashedPassword;
-        return user;
-      },
-    },
+    timestamps: true
   }
 );
 
-module.exports = mongoose.model("User", userSchema);
+
+const User = mongoose.model("User", userSchema);
+
+module.exports = User
