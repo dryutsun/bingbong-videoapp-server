@@ -1,51 +1,51 @@
-const express = require('express')
+const express = require("express");
 // jsonwebtoken docs: https://github.com/auth0/node-jsonwebtoken
-const crypto = require('crypto')
+const crypto = require("crypto");
 // Passport docs: http://www.passportjs.org/docs/
-const passport = require('passport')
+const passport = require("passport");
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
+const mongoose = require("mongoose")
 const bcrypt = require('bcrypt')
 const removeBlanks = require("../../lib/remove_blank_fields")
 const customErrors = require("../../lib/custom_errors")
 const handle404 = customErrors.handle404
 
-
 // see above for explanation of "salting", 10 rounds is recommended
-const bcryptSaltRounds = 10
+const bcryptSaltRounds = 10;
 
 // pull in error types and the logic to handle them and set status codes
-const errors = require('../../lib/custom_errors')
+const errors = require("../../lib/custom_errors");
 
-const BadParamsError = errors.BadParamsError
-const BadCredentialsError = errors.BadCredentialsError
+const BadParamsError = errors.BadParamsError;
+const BadCredentialsError = errors.BadCredentialsError;
 
-const User = require('../models/user')
-const Video = require('../models/video')
+const User = require("../models/user");
+const Video = require("../models/video");
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `res.user`
-const requireToken = passport.authenticate('bearer', { session: false })
+const requireToken = passport.authenticate("bearer", { session: false });
 
 // instantiate a router (mini app that only handles routes)
-const router = express.Router()
+const router = express.Router();
 
 // INDEX
 // GET /examples
-router.get('/videos',  (req, res, next) => {
-	Video.find()
-		.then((foundVideos) => {
-            console.log(foundVideos)
-			// `examples` will be an array of Mongoose documents
-			// we want to convert each one to a POJO, so we use `.map` to
-			// apply `.toObject` to each one
-			return foundVideos.map((video) => video.toObject())
-		})
-		// respond with status 200 and JSON of the examples
-		.then((videos) => res.status(200).json({ videos: videos }))
-		// if an error occurs, pass it to the handler
-		.catch(next)
-})
+router.get("/videos", (req, res, next) => {
+  Video.find()
+    .then((foundVideos) => {
+      console.log(foundVideos);
+      // `examples` will be an array of Mongoose documents
+      // we want to convert each one to a POJO, so we use `.map` to
+      // apply `.toObject` to each one
+      return foundVideos.map((video) => video.toObject());
+    })
+    // respond with status 200 and JSON of the examples
+    .then((videos) => res.status(200).json({ videos: videos }))
+    // if an error occurs, pass it to the handler
+    .catch(next);
+});
 
 // CREATE
 // POST /examples
@@ -90,7 +90,7 @@ router.patch("/videos/:id", removeBlanks, (req, res, next) => {
 
       // pass the result of Mongoose's `.update` to the next `.then`
       console.log(req.body.editedVideo)
-      return editedVideo.updateOne(req.body.editedVideo)
+      return editedVideo.updateOne(req.body.Video)
     })
     // if that succeeded, return 204 and no JSON
     .then(() => res.sendStatus(204))
@@ -116,3 +116,4 @@ router.delete('/videos/:id',  (req, res, next) => {
 })
 
 module.exports = router 
+

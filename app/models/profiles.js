@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const User = require("./user");
+const commentSchema = require("./comment");
+const videoSchema = require("./video");
 
 const profileSchema = new mongoose.Schema(
   {
@@ -15,19 +18,43 @@ const profileSchema = new mongoose.Schema(
       // Note: Populate means replacing the owner id with the person document...
       required: true,
     },
+    followers: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profile",
+
+    }],
+    following: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profile",
+
+    }],
     comments: [commentSchema],
-    videos: [videoSchema],
+    videos: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Videos",
+      required: true,
+    }],
   },
   {
-    timestamps: true,
-    toObject: {
-      // remove `hashedPassword` field when we call `.toObject`
-      transform: (_doc, user) => {
-        delete user.hashedPassword;
-        return user;
-      },
-    },
+    timestamps: true
   }
 );
 
-module.exports = mongoose.model("User", userSchema);
+const Profile = mongoose.model("Profile", profileSchema);
+
+// exporting module and aliasing
+module.exports = Profile
+
+
+// followers: [{type: mongoose.Schema.ObjectId, ref: 'User'}]
+// mechanism of attachment:
+// - push?
+// mechanism of removal:
+// - pull?
+
+// following: [{type: mongoose.Schema.ObjectId, ref: 'User'}]
+// mechanism of attachment:
+// - push?
+// mechanism of removal:
+// - pull?
+
