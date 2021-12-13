@@ -4,7 +4,7 @@ const crypto = require("crypto");
 // Passport docs: http://www.passportjs.org/docs/
 const passport = require("passport");
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
-
+const mongoose = require("mongoose")
 const bcrypt = require('bcrypt')
 const removeBlanks = require("../../lib/remove_blank_fields")
 const customErrors = require("../../lib/custom_errors")
@@ -90,7 +90,7 @@ router.patch("/videos/:id", removeBlanks, (req, res, next) => {
 
       // pass the result of Mongoose's `.update` to the next `.then`
       console.log(req.body.editedVideo)
-      return editedVideo.updateOne(req.body.editedVideo)
+      return editedVideo.updateOne(req.body.Video)
     })
     // if that succeeded, return 204 and no JSON
     .then(() => res.sendStatus(204))
