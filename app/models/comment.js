@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const commentSchema = new mongoose.Schema(
   {
     postedBy: {
@@ -9,7 +10,6 @@ const commentSchema = new mongoose.Schema(
       ref: "User"
       // Note: Populate means replacing the owner id with the person document...
 
-      
     },
     commentText: {
       type: String,
@@ -22,6 +22,5 @@ const commentSchema = new mongoose.Schema(
   }
 );
 
-const Comment = mongoose.model("Comment", commentSchema);
+module.exports= commentSchema;
 
-module.exports = commentSchema;
