@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("./user");
+const commentSchema = require('./comment')
+
 
 const videoSchema = new mongoose.Schema({
   url: {
@@ -27,12 +29,7 @@ const videoSchema = new mongoose.Schema({
   categoryName: {
     type: String,
   }, // maybe needs its own schema
-  comments: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment",
-    },
-  ],
+  comments: [commentSchema],
 });
 
 const Video = mongoose.model("Video", videoSchema);
