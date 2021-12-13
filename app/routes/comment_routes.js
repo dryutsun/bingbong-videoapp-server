@@ -107,19 +107,26 @@ router.post('/comments/:videoId', requireToken, (req, res, next) => {
 
 // UPDATE
 // PATCH /examples/5a7db6c74d55bc51bdf39793
-router.patch('/comments/:id', removeBlanks, (req, res, next) => {
+router.patch('/comments/:videoId/:commentId', removeBlanks, requireToken, (req, res, next) => {
 	// if the client attempts to change the `owner` property by including a new
 	// owner, prevent that by deleting that key/value pair
 	// delete req.body.example.owner
 
-	Comment.findById(req.params.id)
+	Video.findById(req.params.videoId)
 		.then(handle404)
-		.then((editComment) => {
+		.then(video => {
+			// req.body.comment.postedBy= req.user.id
+			const comment = video.comments.id(req.params.commentId)
+			const newComment = req.body.comment
+
+			comment.commentText= newComment.commentText
+			comment.thumbnail = newComment.thumbnail
+			
 			// pass the `req` object and the Mongoose record to `requireOwnership`
 			// it will throw an error if the current user isn't the owner
 			// requireOwnership(req, example)
 			// pass the result of Mongoose's `.update` to the next `.then`
-			return editComment.updateOne(req.body.Comment)
+			return video.save()
 		})
 		// if that succeeded, return 204 and no JSON
 		.then(() => res.sendStatus(204))
@@ -127,21 +134,34 @@ router.patch('/comments/:id', removeBlanks, (req, res, next) => {
 		.catch(next)
 })
 
+
 // DESTROY
 // DELETE /examples/5a7db6c74d55bc51bdf39793
-router.delete('/comments/:id',  (req, res, next) => {
-	Comment.findById(req.params.id)
-		.then(handle404)
-		.then((deleteComment) => {
-			// throw an error if current user doesn't own `example`
-			// requireOwnership(req, example)
-			// delete the example ONLY IF the above didn't throw
-			deleteComment.deleteOne()
+router.delete('/comments/:videoId/:commentId', (req,res,next)=>{
+	Video.findById(req.params.videoId)
+	.then(handle404)
+		.then(video => {
+			video.comments.pull(req.params.commentId)
+
+			return video.save()
 		})
-		// send back 204 and no content if the deletion succeeded
 		.then(() => res.sendStatus(204))
-		// if an error occurs, pass it to the handler
-		.catch(next)
+        .catch(next)
 })
+
+// router.delete('/comments/:id',  (req, res, next) => {
+// 	Comment.findById(req.params.id)
+// 		.then(handle404)
+// 		.then((deleteComment) => {
+// 			// throw an error if current user doesn't own `example`
+// 			// requireOwnership(req, example)
+// 			// delete the example ONLY IF the above didn't throw
+// 			deleteComment.deleteOne()
+// 		})
+// 		// send back 204 and no content if the deletion succeeded
+// 		.then(() => res.sendStatus(204))
+// 		// if an error occurs, pass it to the handler
+// 		.catch(next)
+// })
 
 module.exports = router
