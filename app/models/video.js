@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("./user");
-const commentSchema = require("./comment");
+const commentSchema = require('./comment')
+
 
 const videoSchema = new mongoose.Schema({
   url: {

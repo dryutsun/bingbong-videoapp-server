@@ -5,6 +5,7 @@ const passport = require("passport");
 
 // pull in Mongoose model for examples
 const Comment = require("../models/comment");
+const Video = require('../models/video')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -32,53 +33,71 @@ const router = express.Router();
 
 // INDEX
 // GET /examples
-router.get('/comments', (req, res, next) => {
-	Comment.find()
-		.then((foundComments) => {
-            console.log(foundComments)
-			// `examples` will be an array of Mongoose documents
-			// we want to convert each one to a POJO, so we use `.map` to
-			// apply `.toObject` to each one
-			return foundComments.map((comment) => comment.toObject())
+// router.get('/comments', (req, res, next) => {
+// 	Comment.find()
+// 		.then((foundComments) => {
+//             console.log(foundComments)
+// 			// `examples` will be an array of Mongoose documents
+// 			// we want to convert each one to a POJO, so we use `.map` to
+// 			// apply `.toObject` to each one
+// 			return foundComments.map((comment) => comment.toObject())
+// 		})
+// 		// respond with status 200 and JSON of the examples
+// 		.then((comments) => res.status(200).json({ comments: comments }))
+// 		// if an error occurs, pass it to the handler
+// 		.catch(next)
+// })
+router.get('/comments/:videoId/:commentId', requireToken, (req, res, next) => {
+	Video.findById(req.params.videoId)
+		.then(video =>{
+			return video.comments.id(req.params.commentId)
 		})
-		// respond with status 200 and JSON of the examples
-		.then((comments) => res.status(200).json({ comments: comments }))
-		// if an error occurs, pass it to the handler
+		.then (comment => res.status(200).json(comment.toJSON()))
 		.catch(next)
 })
 
-// SHOW
-// GET /examples/5a7db6c74d55bc51bdf39793
-router.get('/comments/:id', (req, res, next) => {
-	// req.params.id will be set based on the `:id` in the route
-	Comment.findById(req.params.id)
-		.then(handle404)
-		// if `findById` is succesful, respond with 200 and "example" JSON
-		.then((comment) => res.status(200).json({ Comment: comment.toObject() }))
-		// if an error occurs, pass it to the handler
-		.catch(next)
-})
+// router.get('/comments/:videoId', requireToken, (req, res, next) => {
+// 	Video.findById(req.params.videoId)
+// 		.then(video =>{
+// 			return video.comments
+// 		})
+// 		.then (comments => res.status(200).json(comments.toJSON()))
+// 		.catch(next)
+// })
+// // SHOW
+// // GET /examples/5a7db6c74d55bc51bdf39793
+// router.get('/comments/:id', (req, res, next) => {
+// 	// req.params.id will be set based on the `:id` in the route
+// 	Comment.findById(req.params.id)
+// 		.then(handle404)
+// 		// if `findById` is succesful, respond with 200 and "example" JSON
+// 		.then((comment) => res.status(200).json({ Comment: comment.toObject() }))
+// 		// if an error occurs, pass it to the handler
+// 		.catch(next)
+// })
 
 
 //example post data
 // {
-    // "Comment":{
-    //     "commentText": "test post working",
-    //     "thumbnail": "jonathan" 
-    // }
+//     "Comment":{
+//         "commentText": "test post working",
+//         "thumbnail": "jonathan" 
+//     	}
 // }
 
 
 // CREATE
 // POST /examples
-router.post('/comments', (req, res, next) => {
-	// set owner of new example to be current user
-	// req.body.comment.owner = req.user.id
-
-	Comment.create(req.body.Comment)
+router.post('/comments/:videoId', requireToken, (req, res, next) => {
+	Video.findById(req.params.videoId)
 		// respond to succesful `create` with status 201 and JSON of new "example"
-		.then((newComment) => {
-			res.status(201).json({ Comment: newComment.toObject() })
+		.then (video => {
+			req.body.comment.postedBy= req.user.id
+			video.comments.push(req.body.comment)
+			return video.save()
+		})
+		.then(video =>{
+			res.status(201).json({video: video.toObject()})
 		})
 		// if an error occurs, pass it off to our error handler
 		// the error handler needs the error message and the `res` object so that it
