@@ -43,8 +43,9 @@ router.get("/users", (req, res, next) => {
 // 200 RETURN BUT NOT GETTING CONTENT ONLY ID
 // IS THIS BECAUSE OF NULL FIELDS?
 
-router.get("/users/:id", (req, res, next) => {
+router.get("/users/:id", requireToken, (req, res, next) => {
   Profile.findById(req.params.id)
+    .populate('following', ['username', '_id'])
     .then((Profile)=> res.status(200).json({ Profile }))
     .catch((next)) 
 })

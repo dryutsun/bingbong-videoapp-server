@@ -34,6 +34,7 @@ const videoSchema = new mongoose.Schema({
 const Video = mongoose.model("Video", videoSchema);
 
 module.exports = Video;
+module.exports = videoSchema
 
 // const test = new Video({
 //   url: "https://youtu.be/4hMpYTkjh4s",
