@@ -9,6 +9,7 @@ const passport = require("passport");
 const User = require("../models/user");
 const Profile = require("../models/profiles");
 const Comment = require("../models/comment");
+const Video = require("../models/video")
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -34,7 +35,7 @@ const router = express.Router();
 
 router.get("/users", (req, res, next) => {
   Profile.find()
-    .then((profile) => res.status(200).json({ profile }))
+    .then((profile) => res.status(200).json({ profile : profile }))
     .catch(next)
 });
 
@@ -45,16 +46,16 @@ router.get("/users", (req, res, next) => {
 
 router.get("/users/:id", requireToken, (req, res, next) => {
   Profile.findById(req.params.id)
-    .populate('following', ['username', '_id'])
-    .then((Profile)=> res.status(200).json({ Profile }))
+    .then((profile)=> res.status(200).json({ profile : profile.toObject() }))
     .catch((next)) 
+    // .populate('following', ['username', '_id'])
 })
 
 // router.get("/users/:userid", (req, res, next) => {
 //   let user
 //   Profile.create()
 // ! PROFILE CREATE, WILL REQUIRE USER TO BE LOGGED IN
-router.post('/users', (req,res,next) => {
+router.post('/users',  requireToken, (req,res,next) => {
   // This will need to be tied to the current logged in user eventually.
   Profile.create(req.body.profile)
     .then((profile) => { res.status(201).json({ profile: profile.toObject() })
@@ -77,7 +78,7 @@ router.patch('/users/:id', removeBlanks, (req,res,next) => {
 
 // DELETE
 // WORKING? WILL HAVE TO TEST WITH TWO PROFILES IN DB
-router.delete('/users/:id', (req, res, next) => {
+router.delete('/users/:id',  requireToken, (req, res, next) => {
   Profile.findById(req.params.id)
     .then(handle404)
     .then((profile) => {

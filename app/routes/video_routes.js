@@ -19,8 +19,8 @@ const errors = require("../../lib/custom_errors");
 const BadParamsError = errors.BadParamsError;
 const BadCredentialsError = errors.BadCredentialsError;
 
+const Video = require("../models/video")
 const User = require("../models/user");
-const Video = require("../models/video");
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -35,11 +35,11 @@ const router = express.Router();
 router.get("/videos", (req, res, next) => {
   Video.find()
     .then((foundVideos) => {
-      console.log(foundVideos);
+      console.log(foundVideos)
       // `examples` will be an array of Mongoose documents
       // we want to convert each one to a POJO, so we use `.map` to
       // apply `.toObject` to each one
-      return foundVideos.map((video) => video.toObject());
+      return foundVideos.map((video) => video.toObject())
     })
     // respond with status 200 and JSON of the examples
     .then((videos) => res.status(200).json({ videos: videos }))
