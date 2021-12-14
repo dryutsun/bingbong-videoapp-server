@@ -89,10 +89,13 @@ router.get('/comments/:videoId/:commentId', requireToken, (req, res, next) => {
 
 // CREATE
 // POST /examples
+
+// Nested query 
 router.post('/comments/:videoId', requireToken, (req, res, next) => {
 	Video.findById(req.params.videoId)
 		// respond to succesful `create` with status 201 and JSON of new "example"
 		.then (video => {
+			console.log("this is cur user in comment", req.user)
 			req.body.comment.postedBy = req.user.id
 			// .populate('Profile', 'username')
 			req.body.comment.username = req.user.profile

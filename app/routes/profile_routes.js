@@ -55,7 +55,7 @@ router.get("/users/:id", requireToken, (req, res, next) => {
 //   let user
 //   Profile.create()
 // ! PROFILE CREATE, WILL REQUIRE USER TO BE LOGGED IN
-router.post('/users',  requireToken, (req,res,next) => {
+router.post('/users', (req,res,next) => {
   // This will need to be tied to the current logged in user eventually.
   Profile.create(req.body.profile)
     .then((profile) => { res.status(201).json({ profile: profile.toObject() })

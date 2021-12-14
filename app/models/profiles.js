@@ -4,6 +4,10 @@ const commentSchema = require("./comment");
 const Video = require("./video");
 const videoSchema = require("./video")
 
+
+// when we make a request 
+// if we have the profile in the frontend as a prop...
+// then we would send it as a hidden request body
 const profileSchema = new mongoose.Schema(
   {
     username: {
@@ -22,9 +26,9 @@ const profileSchema = new mongoose.Schema(
 
     // Should we put this in User? <-- Let's ask timm about circular dependencies
 
-    followers: {
-      type: Array
-    }
+    // followers: {
+    //   type: Array
+    // }
     // following: [{
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: "Profile",
