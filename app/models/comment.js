@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const Profile = require("./profiles")
 
 const commentSchema = new mongoose.Schema(
   {
@@ -10,6 +10,9 @@ const commentSchema = new mongoose.Schema(
       ref: "User"
       // Note: Populate means replacing the owner id with the person document...
 
+    },
+    username: { // as long as we send it in as a string...
+      type: String,
     },
     commentText: {
       type: String,

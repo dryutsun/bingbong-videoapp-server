@@ -9,6 +9,7 @@ const passport = require("passport");
 const User = require("../models/user");
 const Profile = require("../models/profiles");
 const Comment = require("../models/comment");
+const Video = require("../models/video")
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -34,7 +35,7 @@ const router = express.Router();
 
 router.get("/users", (req, res, next) => {
   Profile.find()
-    .then((profile) => res.status(200).json({ profile }))
+    .then((profile) => res.status(200).json({ profile : profile }))
     .catch(next)
 });
 
@@ -43,10 +44,11 @@ router.get("/users", (req, res, next) => {
 // 200 RETURN BUT NOT GETTING CONTENT ONLY ID
 // IS THIS BECAUSE OF NULL FIELDS?
 
-router.get("/users/:id", (req, res, next) => {
+router.get("/users/:id", requireToken, (req, res, next) => {
   Profile.findById(req.params.id)
-    .then((Profile)=> res.status(200).json({ Profile }))
+    .then((profile)=> res.status(200).json({ profile : profile.toObject() }))
     .catch((next)) 
+    // .populate('following', ['username', '_id'])
 })
 
 // router.get("/users/:userid", (req, res, next) => {
@@ -76,7 +78,7 @@ router.patch('/users/:id', removeBlanks, (req,res,next) => {
 
 // DELETE
 // WORKING? WILL HAVE TO TEST WITH TWO PROFILES IN DB
-router.delete('/users/:id', (req, res, next) => {
+router.delete('/users/:id',  requireToken, (req, res, next) => {
   Profile.findById(req.params.id)
     .then(handle404)
     .then((profile) => {

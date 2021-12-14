@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const User = require("./user");
 const commentSchema = require('./comment')
 
-
 const videoSchema = new mongoose.Schema({
   url: {
     type: String,
@@ -34,7 +33,8 @@ const videoSchema = new mongoose.Schema({
 
 const Video = mongoose.model("Video", videoSchema);
 
-module.exports = Video;
+module.exports = Video
+
 
 // const test = new Video({
 //   url: "https://youtu.be/4hMpYTkjh4s",
