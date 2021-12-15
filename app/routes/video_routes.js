@@ -52,7 +52,7 @@ router.get("/videos", (req, res, next) => {
 router.post('/videos', (req, res, next) => {
 	// set owner of new example to be current user
 	// req.body.Video.owner = req.user.id
-	Video.create(req.body.Video)
+	Video.create(req.body)
 		// respond to succesful `create` with status 201 and JSON of new "example"
 		.then((createdVideo) => {
 			res.status(201).json({ createdVideo: createdVideo.toObject() })
