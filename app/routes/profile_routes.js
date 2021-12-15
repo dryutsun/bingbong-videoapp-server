@@ -33,8 +33,14 @@ const requireToken = passport.authenticate("bearer", { session: false });
 // instantiate a router (mini app that only handles routes)
 const router = express.Router();
 
-router.get("/users", requireToken, (req, res, next) => {
+router.get("/users/", (req, res, next) => {
   Profile.find()
+    .then((profiles) => {
+    // `examples` will be an array of Mongoose documents
+    // we want to convert each one to a POJO, so we use `.map` to
+    // apply `.toObject` to each one
+    return profiles.map((profiles) => profiles.toObject())
+    })
     .then((profile) => res.status(200).json({profile}))
     .catch(next)
 });
@@ -42,8 +48,9 @@ router.get("/users", requireToken, (req, res, next) => {
 // 200 RETURN BUT NOT GETTING CONTENT ONLY ID
 // IS THIS BECAUSE OF NULL FIELDS?
 
-router.get("/users/:id", requireToken, (req, res, next) => {
+router.get("/users/:id", (req, res, next) => {
   Profile.findById(req.params.id)
+    .then(handle404)
     .then((profile)=> res.status(200).json({ profile : profile.toObject() }))
     .catch((next)) 
     // .populate('following', ['username', '_id'])
@@ -55,9 +62,9 @@ router.get("/users/:id", requireToken, (req, res, next) => {
 //   let user
 //   Profile.create()
 // ! PROFILE CREATE, WILL REQUIRE USER TO BE LOGGED IN
-router.post('/users', requireToken, (req,res,next) => {
+router.post('/users/', requireToken, (req,res,next) => {
   // This will need to be tied to the current logged in user eventually.
-  Profile.create(req.body)
+  Profile.create(req.body.profile)
     .then((profile) => { res.status(201).json({ profile: profile.toObject() })
     })
     .catch(next)

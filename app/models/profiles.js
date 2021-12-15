@@ -27,7 +27,6 @@ const profileSchema = new mongoose.Schema(
     },
 
     // Should we put this in User? <-- Let's ask timm about circular dependencies
-
     // followers: {
     //   type: Array
     // }
@@ -37,6 +36,8 @@ const profileSchema = new mongoose.Schema(
 
     // }],
     // comments: [commentSchema],
+    // a user can own as many videos as they can put up...
+
     // videos: [{
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: "Profile"
