@@ -5,8 +5,10 @@ const commentSchema = require('./comment')
 const videoSchema = new mongoose.Schema({
   url: {
     type: String,
-    required: true,
-    unique: true,
+    // required: true,
+    // unqiue: true
+    // ! don't make this unique...
+    // the videos have an owner
   },
   externalUrl: {
     type: String,
@@ -15,7 +17,7 @@ const videoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  owner: {
+  owner: { // findall videos by userid
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
@@ -34,6 +36,8 @@ const videoSchema = new mongoose.Schema({
 const Video = mongoose.model("Video", videoSchema);
 
 module.exports = Video
+
+// Setting up the "all videos function" in frontend might be better...
 
 
 // const test = new Video({
