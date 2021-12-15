@@ -85,14 +85,24 @@ router.get('/comments/:videoId/:commentId', requireToken, (req, res, next) => {
 //     	}
 // }
 
+// ! 2021-12-14 We decided that we either need to change schemas or change what we are associating to comments...
 
 // CREATE
 // POST /examples
+
+// Nested query 
 router.post('/comments/:videoId', requireToken, (req, res, next) => {
 	Video.findById(req.params.videoId)
 		// respond to succesful `create` with status 201 and JSON of new "example"
 		.then (video => {
-			req.body.comment.postedBy= req.user.id
+			console.log("this is cur user in comment", req.user)
+			req.body.comment.postedBy = req.user.id
+			// .populate('Profile', 'username')
+			req.body.comment.username = req.user.profile
+			console.log("this is profile", req.user.profile)
+
+			console.log(req.user.email)// this is where we are assinging the value of the object...could we assign it to another aspect of user..we could do email...
+			// if attached to profile, it could be username...
 			video.comments.push(req.body.comment)
 			return video.save()
 		})
