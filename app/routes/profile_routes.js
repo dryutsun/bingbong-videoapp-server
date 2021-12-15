@@ -33,13 +33,11 @@ const requireToken = passport.authenticate("bearer", { session: false });
 // instantiate a router (mini app that only handles routes)
 const router = express.Router();
 
-router.get("/users", (req, res, next) => {
+router.get("/users", requireToken, (req, res, next) => {
   Profile.find()
-    .then((profile) => res.status(200).json({ profile : profile }))
+    .then((profile) => res.status(200).json({profile}))
     .catch(next)
 });
-
-
 // USER GET DETAIL
 // 200 RETURN BUT NOT GETTING CONTENT ONLY ID
 // IS THIS BECAUSE OF NULL FIELDS?
@@ -51,21 +49,23 @@ router.get("/users/:id", requireToken, (req, res, next) => {
     // .populate('following', ['username', '_id'])
 })
 
+
+
 // router.get("/users/:userid", (req, res, next) => {
 //   let user
 //   Profile.create()
 // ! PROFILE CREATE, WILL REQUIRE USER TO BE LOGGED IN
-router.post('/users', (req,res,next) => {
+router.post('/users', requireToken, (req,res,next) => {
   // This will need to be tied to the current logged in user eventually.
-  Profile.create(req.body.profile)
+  Profile.create(req.body)
     .then((profile) => { res.status(201).json({ profile: profile.toObject() })
     })
     .catch(next)
 })
 
 // UPDATE
-// ! WORKING
-router.patch('/users/:id', removeBlanks, (req,res,next) => {
+// ! WORKING 
+router.patch('/users/:id', requireToken, removeBlanks, (req,res,next) => {
   Profile.findById(req.params.id)
     .then(handle404)
     .then((profile) => {
