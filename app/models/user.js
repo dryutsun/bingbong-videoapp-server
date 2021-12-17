@@ -14,7 +14,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
+    videos: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profile"
+    }],
     token: String,
   },
   {

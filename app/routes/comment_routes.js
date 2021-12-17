@@ -95,15 +95,17 @@ router.post('/comments/:videoId', requireToken, (req, res, next) => {
 	Video.findById(req.params.videoId)
 		// respond to succesful `create` with status 201 and JSON of new "example"
 		.then (video => {
-			console.log("this is cur user in comment", req.user)
-			req.body.comment.postedBy = req.user.id
+			console.log("this is cur user in comment", req.user._id)
+			// console.log('this is the comment you want' , req.body.comment)
+			console.log('this is the commenttext you want' , req.body.commentText)
+			req.body.postedBy = req.user.id
 			// .populate('Profile', 'username')
-			req.body.comment.username = req.user.profile
-			console.log("this is profile", req.user.profile)
+			// req.body.username = JSON.parse(req.user.email)
+			console.log("this is profile", req.user.email)
 
 			console.log(req.user.email)// this is where we are assinging the value of the object...could we assign it to another aspect of user..we could do email...
 			// if attached to profile, it could be username...
-			video.comments.push(req.body.comment)
+			video.comments.push(req.body)
 			return video.save()
 		})
 		.then(video =>{
