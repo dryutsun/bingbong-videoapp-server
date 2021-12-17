@@ -100,7 +100,7 @@ router.patch("/videos/:id", removeBlanks, (req, res, next) => {
 
 // DESTROY
 // DELETE /examples/5a7db6c74d55bc51bdf39793
-router.delete('/videos/:id',  (req, res, next) => {
+router.delete('/videos/:id', requireToken, (req, res, next) => {
 	Video.findById(req.params.id)
 		.then(handle404)
 		.then((deletedVid) => {
