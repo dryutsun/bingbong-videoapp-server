@@ -98,7 +98,7 @@ router.post('/comments/:videoId', requireToken, (req, res, next) => {
 			console.log("this is cur user in comment", req.user._id)
 			// console.log('this is the comment you want' , req.body.comment)
 			console.log('this is the commenttext you want' , req.body.commentText)
-			req.body.postedBy = req.user.id
+			// req.body.postedBy = req.user.id
 			// .populate('Profile', 'username')
 			// req.body.username = JSON.parse(req.user.email)
 			console.log("this is profile", req.user.email)
