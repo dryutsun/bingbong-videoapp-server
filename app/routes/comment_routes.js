@@ -33,20 +33,21 @@ const router = express.Router();
 
 // INDEX
 // GET /examples
-// router.get('/comments', (req, res, next) => {
-// 	Comment.find()
-// 		.then((foundComments) => {
-//             console.log(foundComments)
-// 			// `examples` will be an array of Mongoose documents
-// 			// we want to convert each one to a POJO, so we use `.map` to
-// 			// apply `.toObject` to each one
-// 			return foundComments.map((comment) => comment.toObject())
-// 		})
-// 		// respond with status 200 and JSON of the examples
-// 		.then((comments) => res.status(200).json({ comments: comments }))
-// 		// if an error occurs, pass it to the handler
-// 		.catch(next)
-// })
+router.get('/comments', (req, res, next) => {
+	Video.find(req.user.id)
+		.then((foundVideos) => {
+            console.log(foundVideos)
+			// `examples` will be an array of Mongoose documents
+			// we want to convert each one to a POJO, so we use `.map` to
+			// apply `.toObject` to each one
+			return foundComments.map((comment) => comment.toObject())
+		})
+		// respond with status 200 and JSON of the examples
+		.then((comments) => res.status(200).json({ comments: comments }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
 router.get('/comments/:videoId/:commentId', requireToken, (req, res, next) => {
 	Video.findById(req.params.videoId)
 		.then(video =>{
@@ -55,35 +56,6 @@ router.get('/comments/:videoId/:commentId', requireToken, (req, res, next) => {
 		.then (comment => res.status(200).json(comment.toJSON()))
 		.catch(next)
 })
-
-// router.get('/comments/:videoId', requireToken, (req, res, next) => {
-// 	Video.findById(req.params.videoId)
-// 		.then(video =>{
-// 			return video.comments
-// 		})
-// 		.then (comments => res.status(200).json(comments.toJSON()))
-// 		.catch(next)
-// })
-// // SHOW
-// // GET /examples/5a7db6c74d55bc51bdf39793
-// router.get('/comments/:id', (req, res, next) => {
-// 	// req.params.id will be set based on the `:id` in the route
-// 	Comment.findById(req.params.id)
-// 		.then(handle404)
-// 		// if `findById` is succesful, respond with 200 and "example" JSON
-// 		.then((comment) => res.status(200).json({ Comment: comment.toObject() }))
-// 		// if an error occurs, pass it to the handler
-// 		.catch(next)
-// })
-
-
-//example post data
-// {
-//     "Comment":{
-//         "commentText": "test post working",
-//         "thumbnail": "jonathan" 
-//     	}
-// }
 
 // ! 2021-12-14 We decided that we either need to change schemas or change what we are associating to comments...
 
@@ -161,19 +133,5 @@ router.delete('/comments/:videoId/:commentId', (req,res,next)=>{
         .catch(next)
 })
 
-// router.delete('/comments/:id',  (req, res, next) => {
-// 	Comment.findById(req.params.id)
-// 		.then(handle404)
-// 		.then((deleteComment) => {
-// 			// throw an error if current user doesn't own `example`
-// 			// requireOwnership(req, example)
-// 			// delete the example ONLY IF the above didn't throw
-// 			deleteComment.deleteOne()
-// 		})
-// 		// send back 204 and no content if the deletion succeeded
-// 		.then(() => res.sendStatus(204))
-// 		// if an error occurs, pass it to the handler
-// 		.catch(next)
-// })
 
 module.exports = router

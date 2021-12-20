@@ -77,20 +77,16 @@ router.get('/videos/:id', (req, res, next) => {
 
 
 router.patch("/videos/:id", removeBlanks, (req, res, next) => {
-  // if the client attempts to change the `owner` property by including a new
-  // owner, prevent that by deleting that key/value pair
-//   delete req.body.example.owner
+
 
   Video.findById(req.params.id)
     .then(handle404)
     .then((editedVideo) => {
-      // pass the `req` object and the Mongoose record to `requireOwnership`
-      // it will throw an error if the current user isn't the owner
-    //   requireOwnership(req, example)
-
-      // pass the result of Mongoose's `.update` to the next `.then`
-      console.log(req.body.editedVideo)
-      return editedVideo.updateOne(req.body.Video)
+		console.log("this is req:", req)
+		console.log("this is req.params.id", req.params.id)	
+    //   console.log("this is edited video", editedVideo)
+	//   console.log("this is req.body", req.body)
+      return editedVideo.updateOne(req.body)
     })
     // if that succeeded, return 204 and no JSON
     .then(() => res.sendStatus(204))
